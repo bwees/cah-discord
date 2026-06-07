@@ -515,3 +515,13 @@ client.on("messageReactionAdd", (reaction, user) => {
 })
 
 client.login(process.env.TOKEN)
+
+// Graceful shutdown on termination signals (e.g. `docker stop` sends SIGTERM)
+function shutdown(signal) {
+    console.log(`Received ${signal}, shutting down gracefully...`)
+    client.destroy()
+    process.exit(0)
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'))
+process.on('SIGINT', () => shutdown('SIGINT'))
