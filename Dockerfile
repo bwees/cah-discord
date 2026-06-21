@@ -1,11 +1,13 @@
-FROM node:slim
-WORKDIR /etc/app
+FROM golang:1.26-alpine AS build
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /cah .
 
-COPY app.js .
+FROM alpine:3.20
+RUN apk add --no-cache ca-certificates
+WORKDIR /app
+COPY --from=build /cah /app/cah
 COPY cards cards/
-COPY badwords badwords/
-COPY package.json .
-
-RUN npm i discord.js
-
-ENTRYPOINT ["node", "app.js"]
+ENTRYPOINT ["/app/cah"]
