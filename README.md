@@ -6,10 +6,10 @@ through buttons and modals — no chat commands during play.
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `/cah new` | Open a lobby in the current channel. Others join with the **Join** button; the host presses **Start Game** (needs 3+ players). |
-| `/cah end` | End the game (host only) and post the final scoreboard and winner. |
+| Command                   | What it does                                                                                                                                                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/cah new`                | Open a lobby in the current channel. Others join with the **Join** button; the host presses **Start Game** (needs 3+ players).                                                                                              |
+| `/cah end`                | End the game (host only) and post the final scoreboard and winner.                                                                                                                                                          |
 | `/add <card_type> <text>` | Add a custom card to the deck. `card_type` is a White/Black picker. For black cards the number of blanks is taken from the text — each run of underscores (`_` or `__`) counts as one blank; no underscores means one pick. |
 
 ## How a round works
@@ -34,20 +34,32 @@ Buttons are enabled only for the relevant phase; clicking one you can't use
 
 ## Running
 
+The bot reads its credentials from environment variables:
+
+| Variable         | Description      |
+| ---------------- | ---------------- |
+| `DISCORD_TOKEN`  | Bot access token |
+| `DISCORD_APP_ID` | Application ID   |
+
 ```sh
 go build -o cah .
-./cah -token <BOT_TOKEN> -app <APPLICATION_ID> [-guild <GUILD_ID>]
+DISCORD_TOKEN=... DISCORD_APP_ID=... ./cah [-guild <GUILD_ID>]
 ```
 
-Flags: `-token`, `-app`, `-guild` (omit for global commands), `-cleanup`
-(delete commands on shutdown, default true), `-cards`, `-custom`.
+The token and app ID can also be passed with `-token`/`-app`, which override the
+env vars. Other flags: `-guild` (omit for global commands), `-cleanup` (delete
+commands on shutdown, default true), `-cards`, `-custom`.
 
 ### Docker
 
 ```sh
 docker build -t cah-discord .
-docker run cah-discord -token <BOT_TOKEN> -app <APPLICATION_ID>
+docker run -e DISCORD_TOKEN=... -e DISCORD_APP_ID=... cah-discord
 ```
 
 Custom cards are written to `cards/custom_cards.json`. Mount a volume there if
 you want them to survive container restarts.
+
+### Disclaimer
+
+Claude Code was used to develop the bot in its entirety. The original JS based bot (which has been replaced) was developed by me.
