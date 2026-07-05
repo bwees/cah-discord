@@ -52,6 +52,14 @@ commands on shutdown, default true), `-cards`, `-custom`.
 
 ### Docker
 
+Prebuilt multi-arch images are published to the GitHub Container Registry:
+
+```sh
+docker run -e DISCORD_TOKEN=... -e DISCORD_APP_ID=... ghcr.io/bwees/cah-discord:latest
+```
+
+Or build locally:
+
 ```sh
 docker build -t cah-discord .
 docker run -e DISCORD_TOKEN=... -e DISCORD_APP_ID=... cah-discord
@@ -59,6 +67,17 @@ docker run -e DISCORD_TOKEN=... -e DISCORD_APP_ID=... cah-discord
 
 Custom cards are written to `cards/custom_cards.json`. Mount a volume there if
 you want them to survive container restarts.
+
+## Releasing
+
+Releases are built by [GoReleaser](https://goreleaser.com). Push a semver tag and
+the `release` workflow cuts a GitHub release (binary archives + checksums) and
+pushes multi-arch Docker images:
+
+```sh
+git tag v1.1.0
+git push origin v1.1.0
+```
 
 ### Disclaimer
 

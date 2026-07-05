@@ -11,6 +11,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var version = "dev"
+
 var (
 	GuildID  = flag.String("guild", "", "Test guild ID (empty = global commands)")
 	BotToken = flag.String("token", os.Getenv("DISCORD_TOKEN"), "Bot access token (env DISCORD_TOKEN)")
@@ -22,6 +24,8 @@ var (
 
 func main() {
 	flag.Parse()
+
+	log.Printf("cah-discord %s", version)
 
 	if *BotToken == "" || *AppID == "" {
 		log.Fatal("DISCORD_TOKEN and DISCORD_APP_ID must be set (or pass -token/-app)")
