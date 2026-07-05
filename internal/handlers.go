@@ -32,6 +32,10 @@ func (b *Bot) Commands() []*discordgo.ApplicationCommand {
 			Name:        "add",
 			Description: "Add a custom card to the deck",
 		},
+		{
+			Name:        "cards",
+			Description: "Show how many custom cards have been added",
+		},
 	}
 }
 
@@ -71,6 +75,8 @@ func (b *Bot) handleCommand(i *discordgo.InteractionCreate) {
 		}
 	case "add":
 		b.handleAdd(i)
+	case "cards":
+		b.handleCards(i)
 	}
 }
 
@@ -103,6 +109,11 @@ func (b *Bot) handleAdd(i *discordgo.InteractionCreate) {
 	if err := b.s.InteractionRespond(i.Interaction, AddCardModal()); err != nil {
 		log.Printf("add modal: %v", err)
 	}
+}
+
+func (b *Bot) handleCards(i *discordgo.InteractionCreate) {
+	white, black := b.m.CustomCounts()
+	b.respondComponents(i, CustomCardsComponents(white, black))
 }
 
 func (b *Bot) handleComponent(i *discordgo.InteractionCreate) {

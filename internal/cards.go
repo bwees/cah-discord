@@ -99,6 +99,17 @@ func (d *Deck) AddCard(cardType, text string) (int, error) {
 	return pick, nil
 }
 
+func (d *Deck) CustomCounts() (white, black int) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	custom, err := readCards(d.customPath)
+	if err != nil {
+		return 0, 0
+	}
+	return len(custom.White), len(custom.Black)
+}
+
 func (d *Deck) ShuffledWhite() []string {
 	d.mu.Lock()
 	defer d.mu.Unlock()

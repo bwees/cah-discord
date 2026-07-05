@@ -222,6 +222,10 @@ func (m *Manager) AddCard(cardType, text string) (int, error) {
 	return m.deck.AddCard(cardType, text)
 }
 
+func (m *Manager) CustomCounts() (white, black int) {
+	return m.deck.CustomCounts()
+}
+
 func (m *Manager) NewGame(guildID, channelID, ownerID string) (LobbyView, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()

@@ -39,6 +39,23 @@ func TestAddCardPersists(t *testing.T) {
 	}
 }
 
+func TestCustomCounts(t *testing.T) {
+	custom := filepath.Join(t.TempDir(), "custom.json")
+	d := &Deck{customPath: custom}
+
+	if white, black := d.CustomCounts(); white != 0 || black != 0 {
+		t.Fatalf("empty counts white=%d black=%d, want 0 0", white, black)
+	}
+
+	d.AddCard("white", "A custom card.")
+	d.AddCard("white", "Another one.")
+	d.AddCard("black", "Why did the _ cross the road?")
+
+	if white, black := d.CustomCounts(); white != 2 || black != 1 {
+		t.Fatalf("counts white=%d black=%d, want 2 1", white, black)
+	}
+}
+
 func TestLoadDeckMergesCustom(t *testing.T) {
 	d, err := LoadDeck("../cards/cards.json", "../cards/custom_cards.json")
 	if err != nil {

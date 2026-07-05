@@ -293,6 +293,18 @@ func AddCardModal() *discordgo.InteractionResponse {
 	}
 }
 
+func CustomCardsComponents(white, black int) []discordgo.MessageComponent {
+	return []discordgo.MessageComponent{
+		discordgo.Container{
+			AccentColor: intPtr(accentColor),
+			Components: []discordgo.MessageComponent{
+				discordgo.TextDisplay{Content: "🃏 **Custom cards**"},
+				discordgo.TextDisplay{Content: fmt.Sprintf("⬜ White: **%d**\n⬛ Black: **%d**\n**Total: %d**", white, black, white+black)},
+			},
+		},
+	}
+}
+
 func AddedCardComponents(authorID, cardType, text string, pick int) []discordgo.MessageComponent {
 	header := fmt.Sprintf("➕ <@%s> added a **white card**", authorID)
 	body := text
